@@ -6,9 +6,11 @@ import android.os.Bundle
 import android.view.View
 import android.widget.EditText
 import android.widget.Spinner
-import com.toygar.models.Priority
-import com.toygar.models.TASKS
-import com.toygar.models.Task
+import com.toygar.tasks.models.Priority
+import com.toygar.tasks.models.TASKS
+import com.toygar.tasks.models.Task
+import com.toygar.tasks.repositories.InMemoryTaskRepository
+import com.toygar.tasks.repositories.TASK_REPOSITORY
 import java.util.*
 
 class CreateTask : AppCompatActivity() {
@@ -22,9 +24,7 @@ class CreateTask : AppCompatActivity() {
         val taskPriority = findViewById<Spinner>(R.id.spinnerPriority).selectedItem.toString()
         val taskDescription = findViewById<EditText>(R.id.editTextDescription)?.text.toString()
         val task = Task(taskName, Priority.valueOf(taskPriority.toUpperCase(Locale.ROOT)), taskDescription)
-        for (i in 0..50){
-            TASKS.add(task)
-        }
+        TASK_REPOSITORY.insertTask(task)
         startActivity(Intent(this, MainActivity::class.java))
     }
 }

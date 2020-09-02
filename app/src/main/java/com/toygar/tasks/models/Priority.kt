@@ -1,4 +1,4 @@
-package com.toygar.models
+package com.toygar.tasks.models
 
 enum class Priority {
     HIGH,

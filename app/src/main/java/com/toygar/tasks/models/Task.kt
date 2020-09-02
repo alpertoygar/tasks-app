@@ -1,4 +1,4 @@
-package com.toygar.models
+package com.toygar.tasks.models
 
 val TASKS = mutableListOf<Task>()
 
