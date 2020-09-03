@@ -5,19 +5,10 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.toygar.tasks.models.Task
 import com.toygar.tasks.repositories.InMemoryTaskRepository
+import com.toygar.tasks.repositories.TaskRepository
 
-class TaskListViewModel : ViewModel(){
-    private val tasks: MutableLiveData<List<Task>> by lazy {
-        MutableLiveData<List<Task>>().also {
-            loadTasks()
-        }
-    }
-
-    fun getTasks() : LiveData<List<Task>> {
-        return tasks
-    }
-
-    private fun loadTasks(): List<Task> {
-        return InMemoryTaskRepository().getTasks()
-    }
+class TaskListViewModel(
+    taskRepository: TaskRepository = InMemoryTaskRepository
+) : ViewModel() {
+    val tasks: LiveData<out List<Task>> = taskRepository.getTasks()
 }

@@ -1,18 +1,20 @@
 package com.toygar.tasks.repositories
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import com.toygar.tasks.models.Task
 
-val TASK_REPOSITORY = InMemoryTaskRepository()
+object InMemoryTaskRepository : TaskRepository {
 
-class InMemoryTaskRepository : TaskRepository {
-
-    private val tasks = mutableListOf<Task>()
+    private val _tasks: MutableList<Task> = mutableListOf()
+    private val tasks: MutableLiveData<List<Task>> = MutableLiveData()
 
     override fun insertTask(task: Task) {
-        tasks.add(task)
+        _tasks.add(task)
+        tasks.value = _tasks
     }
 
-    override fun getTasks(): List<Task> {
+    override fun getTasks(): LiveData<List<Task>> {
         return tasks
     }
 }
