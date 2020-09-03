@@ -24,7 +24,7 @@ class MainActivity : AppCompatActivity() {
         setSupportActionBar(findViewById(R.id.toolbar))
 
         findViewById<FloatingActionButton>(R.id.fab).setOnClickListener {
-            startActivity(Intent(this, CreateTask::class.java))
+            startActivity(Intent(this, CreateTaskActivity::class.java))
         }
 
         val layout = findViewById<LinearLayout>(R.id.mainLayout)

@@ -11,7 +11,7 @@ import com.toygar.tasks.models.Task
 import com.toygar.tasks.repositories.InMemoryTaskRepository
 import java.util.*
 
-class CreateTask : AppCompatActivity() {
+class CreateTaskActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_create_task)
