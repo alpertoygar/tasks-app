@@ -1,3 +1,7 @@
 <resources>
     <dimen name="fab_margin">32dp</dimen>
+    <dimen name="task_left_margin">4dp</dimen>
+    <dimen name="task_top_margin">1.25dp</dimen>
+    <dimen name="task_right_margin">4dp</dimen>
+    <dimen name="task_bottom_margin">0dp</dimen>
 </resources>
