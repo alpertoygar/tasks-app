@@ -36,7 +36,11 @@ class MainActivity : AppCompatActivity() {
                     ViewGroup.LayoutParams.WRAP_CONTENT,
                     ViewGroup.LayoutParams.WRAP_CONTENT
                 )
-                layoutParams.setMargins(16, 5, 16, 0)
+                layoutParams.setMargins(
+                    resources.getDimension(R.dimen.task_left_margin).toInt(),
+                    resources.getDimension(R.dimen.task_top_margin).toInt(),
+                    resources.getDimension(R.dimen.task_right_margin).toInt(),
+                    resources.getDimension(R.dimen.task_bottom_margin).toInt())
                 view.layoutParams = layoutParams
                 val viewText = "%s - %s \n%s".format(task.name, task.priority, task.description)
                 view.text = viewText
