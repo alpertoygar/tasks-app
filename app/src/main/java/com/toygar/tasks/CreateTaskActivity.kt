@@ -12,15 +12,22 @@ import com.toygar.tasks.repositories.InMemoryTaskRepository
 import java.util.*
 
 class CreateTaskActivity : AppCompatActivity() {
+    private lateinit var editTextTaskName : EditText
+    private lateinit var spinnerTaskPriority : Spinner
+    private lateinit var editTextTaskDescription : EditText
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_create_task)
+        editTextTaskName = findViewById(R.id.editTextTaskName)
+        spinnerTaskPriority = findViewById(R.id.spinnerPriority)
+        editTextTaskDescription = findViewById(R.id.editTextDescription)
     }
 
     fun create(view: View) {
-        val taskName = findViewById<EditText>(R.id.editTextTaskName).text.toString()
-        val taskPriority = findViewById<Spinner>(R.id.spinnerPriority).selectedItem.toString()
-        val taskDescription = findViewById<EditText>(R.id.editTextDescription)?.text.toString()
+        val taskName = editTextTaskName.text.toString()
+        val taskPriority = spinnerTaskPriority.selectedItem.toString()
+        val taskDescription = editTextTaskDescription.text.toString()
         val task =
             Task(taskName, Priority.valueOf(taskPriority.toUpperCase(Locale.ROOT)), taskDescription)
         InMemoryTaskRepository.insertTask(task)
