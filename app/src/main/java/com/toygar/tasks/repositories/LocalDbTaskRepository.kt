@@ -13,4 +13,7 @@ class LocalDbTaskRepository(
         taskDao.insertTask(task)
     }
 
+    override suspend fun deleteTask(task: Task) {
+        taskDao.deleteTask(task)
+    }
 }
