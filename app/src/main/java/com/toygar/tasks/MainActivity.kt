@@ -2,18 +2,21 @@ package com.toygar.tasks
 
 import android.content.Intent
 import android.os.Bundle
-import android.view.ViewGroup
-import android.widget.LinearLayout
-import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-import com.toygar.tasks.models.Task
+import com.toygar.tasks.adapters.TaskListAdapter
 import com.toygar.tasks.viewmodels.TaskListViewModel
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var viewModel: TaskListViewModel
+    private lateinit var recyclerView: RecyclerView
+    private lateinit var taskListAdapter: TaskListAdapter
+
+    private var prevTaskListSize: Int = -1
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,26 +28,23 @@ class MainActivity : AppCompatActivity() {
         }
 
         viewModel = TaskListViewModel(applicationContext)
+        recyclerView = findViewById(R.id.recyclerview)
+        taskListAdapter = TaskListAdapter(this, listOf(), viewModel::deleteTask)
+        recyclerView.adapter = taskListAdapter
+        recyclerView.layoutManager = LinearLayoutManager(this)
 
-        val layout = findViewById<LinearLayout>(R.id.mainLayout)
-        viewModel.tasks.observe(this, Observer<List<Task>> { tasks ->
-            tasks.forEach { task ->
-                val view = TextView(this)
-                val layoutParams = LinearLayout.LayoutParams(
-                    ViewGroup.LayoutParams.WRAP_CONTENT,
-                    ViewGroup.LayoutParams.WRAP_CONTENT
-                )
-                layoutParams.setMargins(
-                    resources.getDimension(R.dimen.task_left_margin).toInt(),
-                    resources.getDimension(R.dimen.task_top_margin).toInt(),
-                    resources.getDimension(R.dimen.task_right_margin).toInt(),
-                    resources.getDimension(R.dimen.task_bottom_margin).toInt())
-                view.layoutParams = layoutParams
-                val viewText = "%s - %s \n%s".format(task.name, task.priority, task.description)
-                view.text = viewText
-                layout.addView(view)
+        viewModel.tasks.observe(this, { tasks ->
+            if(prevTaskListSize == -1){
+                prevTaskListSize = tasks.size
             }
+            taskListAdapter.taskList = tasks
+            if(prevTaskListSize < tasks.size){
+                taskListAdapter.notifyItemInserted(tasks.size)
+            }else{
+                taskListAdapter.notifyDataSetChanged()
+            }
+            prevTaskListSize = tasks.size
+            recyclerView.smoothScrollToPosition(tasks.size)
         })
-
     }
 }

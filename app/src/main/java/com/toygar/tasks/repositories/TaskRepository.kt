@@ -7,4 +7,6 @@ interface TaskRepository {
     val tasks : LiveData<List<Task>>
 
     suspend fun insertTask(task: Task)
+
+    suspend fun deleteTask(task: Task)
 }

@@ -20,7 +20,14 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <ScrollView
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
+
+    <!--<ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
@@ -32,7 +39,7 @@
             android:orientation="vertical">
 
         </LinearLayout>
-    </ScrollView>
+    </ScrollView>-->
 
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
