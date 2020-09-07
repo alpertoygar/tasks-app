@@ -7,7 +7,6 @@ import android.view.MenuItem
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
-import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -16,7 +15,7 @@ import com.toygar.tasks.viewmodels.TaskListViewModel
 
 class MainActivity : AppCompatActivity() {
 
-    private val viewModel: TaskListViewModel by viewModels()
+    private lateinit var viewModel: TaskListViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,8 +26,9 @@ class MainActivity : AppCompatActivity() {
             startActivity(Intent(this, CreateTaskActivity::class.java))
         }
 
-        val layout = findViewById<LinearLayout>(R.id.mainLayout)
+        viewModel = TaskListViewModel(applicationContext)
 
+        val layout = findViewById<LinearLayout>(R.id.mainLayout)
         viewModel.tasks.observe(this, Observer<List<Task>> { tasks ->
             tasks.forEach { task ->
                 val view = TextView(this)
