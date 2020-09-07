@@ -2,12 +2,9 @@ package com.toygar.tasks.adapters
 
 import android.content.Context
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageButton
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.toygar.tasks.R
+import com.toygar.tasks.databinding.TaskCardBinding
 import com.toygar.tasks.models.Task
 
 class TaskListAdapter(
@@ -23,8 +20,8 @@ class TaskListAdapter(
         viewType: Int
     ): TaskViewHolder {
 
-        val itemView : View = inflater.inflate(R.layout.task_card, parent, false)
-        return TaskViewHolder(itemView, this)
+        val itemBinding : TaskCardBinding = TaskCardBinding.inflate(inflater, parent, false)
+        return TaskViewHolder(itemBinding)
     }
 
     override fun onBindViewHolder(holder: TaskViewHolder, position: Int) {
@@ -35,21 +32,13 @@ class TaskListAdapter(
     override fun getItemCount(): Int = taskList.size
 
     class TaskViewHolder(
-        itemView: View,
-        val adapter : TaskListAdapter
-    ) : RecyclerView.ViewHolder(itemView) {
-
-        val nameItemView : TextView = itemView.findViewById(R.id.taskName)
-        val descriptionItemView : TextView = itemView.findViewById(R.id.taskDescription)
-        val priorityItemView : TextView = itemView.findViewById(R.id.taskPriority)
-        val deleteButton : ImageButton = itemView.findViewById(R.id.deleteButton)
+        private val itemBinding: TaskCardBinding
+    ) : RecyclerView.ViewHolder(itemBinding.root) {
 
         fun bind(task: Task, deleteMethod: (Task) -> Unit){
-            nameItemView.text = task.name
-            descriptionItemView.text = task.description
-            priorityItemView.text = task.priority.name
+            itemBinding.task = task
 
-            deleteButton.setOnClickListener {
+            itemBinding.deleteButton.setOnClickListener {
                 deleteMethod(task)
             }
         }
