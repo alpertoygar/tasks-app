@@ -1,7 +1,6 @@
 package com.toygar.tasks.models
 
 import androidx.room.TypeConverter
-import androidx.room.TypeConverters
 
 enum class Priority {
     HIGH,
@@ -12,12 +11,9 @@ enum class Priority {
 class PriorityConverter{
 
     @TypeConverter
-    fun fromPriority(value: Priority): String{
-        return value.toString()
-    }
+    fun fromPriority(value: Priority): String = value.toString()
+
 
     @TypeConverter
-    fun toPriority(value: String): Priority{
-        return Priority.valueOf(value)
-    }
+    fun toPriority(value: String): Priority = Priority.valueOf(value)
 }

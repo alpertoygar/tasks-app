@@ -1,4 +1,4 @@
-package com.toygar.tasks.repositories
+package com.toygar.tasks.data
 
 import android.content.Context
 import androidx.room.Database
@@ -16,7 +16,7 @@ abstract class LocalDatabase : RoomDatabase() {
     companion object {
         private var INSTANCE: LocalDatabase? = null
 
-        fun getInstance(context: Context): LocalDatabase? {
+        fun getInstance(context: Context): LocalDatabase {
             synchronized(this) {
                 if (INSTANCE == null) {
                     INSTANCE = Room.databaseBuilder(
@@ -24,7 +24,7 @@ abstract class LocalDatabase : RoomDatabase() {
                         LocalDatabase::class.java, "tasks-db"
                     ).build()
                 }
-                return INSTANCE
+                return INSTANCE!!
             }
         }
     }

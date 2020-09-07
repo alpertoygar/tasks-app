@@ -1,4 +1,4 @@
-package com.toygar.tasks.repositories
+package com.toygar.tasks.data
 
 import androidx.lifecycle.LiveData
 import androidx.room.Dao

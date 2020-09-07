@@ -8,7 +8,6 @@ import android.widget.Spinner
 import androidx.appcompat.app.AppCompatActivity
 import com.toygar.tasks.models.Priority
 import com.toygar.tasks.models.Task
-import com.toygar.tasks.repositories.LocalDatabase
 import com.toygar.tasks.viewmodels.CreateTaskViewModel
 import java.util.*
 

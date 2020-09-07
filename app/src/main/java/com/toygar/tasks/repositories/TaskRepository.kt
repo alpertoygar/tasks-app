@@ -1,15 +1,10 @@
 package com.toygar.tasks.repositories
 
+import androidx.lifecycle.LiveData
 import com.toygar.tasks.models.Task
 
-class TaskRepository(
-    private val taskDao : TaskDao
-) {
+interface TaskRepository {
+    val tasks : LiveData<List<Task>>
 
-    val tasks = taskDao.getTasks()
-
-    suspend fun insertTask(task: Task) {
-        taskDao.insertTask(task)
-    }
-
+    suspend fun insertTask(task: Task)
 }
