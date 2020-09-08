@@ -15,9 +15,6 @@ class MainActivity : AppCompatActivity() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var taskListAdapter: TaskListAdapter
 
-    private var prevTaskListSize: Int = -1
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -34,16 +31,7 @@ class MainActivity : AppCompatActivity() {
         recyclerView.layoutManager = LinearLayoutManager(this)
 
         viewModel.tasks.observe(this, { tasks ->
-            if(prevTaskListSize == -1){
-                prevTaskListSize = tasks.size
-            }
-            taskListAdapter.taskList = tasks
-            if(prevTaskListSize < tasks.size){
-                taskListAdapter.notifyItemInserted(tasks.size)
-            }else{
-                taskListAdapter.notifyDataSetChanged()
-            }
-            prevTaskListSize = tasks.size
+            taskListAdapter.setData(tasks)
             recyclerView.smoothScrollToPosition(tasks.size)
         })
     }
