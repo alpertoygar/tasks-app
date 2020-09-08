@@ -8,7 +8,7 @@ import androidx.room.TypeConverters
 import com.toygar.tasks.models.PriorityConverter
 import com.toygar.tasks.models.Task
 
-@Database(entities = [Task::class], version = 1)
+@Database(entities = [Task::class], version = 2)
 @TypeConverters(PriorityConverter::class)
 abstract class LocalDatabase : RoomDatabase() {
     abstract fun taskDao(): TaskDao
@@ -22,7 +22,7 @@ abstract class LocalDatabase : RoomDatabase() {
                     INSTANCE = Room.databaseBuilder(
                         context,
                         LocalDatabase::class.java, "tasks-db"
-                    ).build()
+                    ).addMigrations(MIGRATION_1_2).build()
                 }
                 return INSTANCE!!
             }

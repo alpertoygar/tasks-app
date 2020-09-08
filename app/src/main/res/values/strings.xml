@@ -14,6 +14,7 @@
     <string name="priority">Priority</string>
     <string name="description">Description (Optional)</string>
     <string name="description_hint">Enter description</string>
+    <string name="task_due_date">Due Date</string>
     <string name="create">Create</string>
 
 </resources>
