@@ -3,13 +3,15 @@ package com.toygar.tasks.adapters
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.toygar.tasks.databinding.TaskCardBinding
 import com.toygar.tasks.models.Task
+import com.toygar.tasks.util.TaskDiffCallback
 
 class TaskListAdapter(
     context: Context,
-    var taskList: List<Task>,
+    private var taskList: List<Task>,
     private val deleteMethod: (Task) -> Unit
 ): RecyclerView.Adapter<TaskListAdapter.TaskViewHolder>() {
 
@@ -30,6 +32,13 @@ class TaskListAdapter(
     }
 
     override fun getItemCount(): Int = taskList.size
+
+    fun setData(newTasks: List<Task>) {
+        val diffCallback = TaskDiffCallback(taskList, newTasks)
+        val diffResult = DiffUtil.calculateDiff(diffCallback)
+        taskList = newTasks
+        diffResult.dispatchUpdatesTo(this)
+    }
 
     class TaskViewHolder(
         private val itemBinding: TaskCardBinding
