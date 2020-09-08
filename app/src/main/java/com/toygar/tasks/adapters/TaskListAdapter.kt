@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.toygar.tasks.databinding.TaskCardBinding
 import com.toygar.tasks.models.Task
 import com.toygar.tasks.util.TaskDiffCallback
+import java.lang.reflect.Field
 
 class TaskListAdapter(
     context: Context,
@@ -38,6 +39,19 @@ class TaskListAdapter(
         val diffResult = DiffUtil.calculateDiff(diffCallback)
         taskList = newTasks
         diffResult.dispatchUpdatesTo(this)
+    }
+
+    fun sortData(sortField: String) {
+        val hm = hashMapOf<String, Comparator<Task>>()
+        hm.put("Description", compareBy(Task::description))
+        hm.put("Name", compareBy(Task::name))
+        hm.put("Due Date", compareBy(Task::dueDate))
+        hm.put("Priority", compareBy(Task::priority))
+        hm.withDefault { compareBy(Task::dueDate) }
+
+        val newTasks = taskList.sortedWith(hm[sortField]!!)
+
+        setData(newTasks)
     }
 
     class TaskViewHolder(
