@@ -24,6 +24,8 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var spinnerSort : Spinner
 
+    private lateinit var spinnerEntries: Array<String>
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -61,5 +63,21 @@ class MainActivity : AppCompatActivity() {
 
         spinnerSort.onItemSelectedListener =
             SpinnerSortItemSelectedListener(taskListAdapter, spinnerEntries)
+
+        setDefaultSort("Due Date")
+    }
+
+    private fun setDefaultSort(field: String) {
+        var pos = 0
+
+        for (spinnerEntry in spinnerEntries) {
+            if(spinnerEntry != field){
+                pos++
+            } else {
+                break
+            }
+        }
+
+        spinnerSort.setSelection(pos)
     }
 }

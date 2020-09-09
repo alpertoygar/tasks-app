@@ -17,6 +17,7 @@ class TaskListAdapter(
 ): RecyclerView.Adapter<TaskListAdapter.TaskViewHolder>() {
 
     private val inflater: LayoutInflater = LayoutInflater.from(context)
+    private var comparator: Comparator<Task> = compareBy(Task::dueDate)
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
@@ -35,9 +36,10 @@ class TaskListAdapter(
     override fun getItemCount(): Int = taskList.size
 
     fun setData(newTasks: List<Task>) {
-        val diffCallback = TaskDiffCallback(taskList, newTasks)
+        val newSortedTasks = newTasks.sortedWith(comparator)
+        val diffCallback = TaskDiffCallback(taskList, newSortedTasks)
         val diffResult = DiffUtil.calculateDiff(diffCallback)
-        taskList = newTasks
+        taskList = newSortedTasks
         diffResult.dispatchUpdatesTo(this)
     }
 
@@ -49,9 +51,9 @@ class TaskListAdapter(
         hm.put("Priority", compareBy(Task::priority))
         hm.withDefault { compareBy(Task::dueDate) }
 
-        val newTasks = taskList.sortedWith(hm[sortField]!!)
+        comparator = hm[sortField]!!
 
-        setData(newTasks)
+        setData(taskList)
     }
 
     class TaskViewHolder(
