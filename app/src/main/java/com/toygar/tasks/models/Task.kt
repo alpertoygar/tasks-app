@@ -3,6 +3,7 @@ package com.toygar.tasks.models
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import java.io.Serializable
 import java.util.*
 
 @Entity
@@ -11,4 +12,4 @@ data class Task(
     @ColumnInfo(name = "task_name") val name: String,
     @ColumnInfo(name = "task_priority")val priority: Priority,
     @ColumnInfo(name = "task_description")val description: String?,
-    @ColumnInfo(name = "task_due_date")val dueDate: Long?)
+    @ColumnInfo(name = "task_due_date")val dueDate: Long?): Serializable

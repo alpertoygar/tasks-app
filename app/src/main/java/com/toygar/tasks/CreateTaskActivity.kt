@@ -12,7 +12,6 @@ import android.widget.TimePicker
 import androidx.appcompat.app.AppCompatActivity
 import com.toygar.tasks.models.Priority
 import com.toygar.tasks.models.Task
-import com.toygar.tasks.viewmodels.CreateTaskViewModel
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -21,7 +20,6 @@ class CreateTaskActivity : AppCompatActivity() {
     private lateinit var spinnerTaskPriority : Spinner
     private lateinit var editTextTaskDescription : EditText
     private lateinit var textViewDueDate : TextView
-    private lateinit var viewModel : CreateTaskViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,7 +29,6 @@ class CreateTaskActivity : AppCompatActivity() {
         editTextTaskDescription = findViewById(R.id.editTextDescription)
         textViewDueDate = findViewById(R.id.textViewDueDate)
         textViewDueDate.text = "%s 12:00".format(SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(Date()))
-        viewModel = CreateTaskViewModel(applicationContext)
     }
 
     fun create(view: View) {
@@ -45,8 +42,11 @@ class CreateTaskActivity : AppCompatActivity() {
             Priority.valueOf(taskPriority.toUpperCase(Locale.ROOT)),
             taskDescription,
             Date.parse(taskDueDate))
-        viewModel.insertTask(task)
-        startActivity(Intent(this, MainActivity::class.java))
+
+        val resultIntent = Intent()
+        resultIntent.putExtra("TASK", task)
+        setResult(1, resultIntent)
+        finish()
     }
 
     fun pickDate(view: View) {

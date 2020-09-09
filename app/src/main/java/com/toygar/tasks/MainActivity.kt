@@ -24,7 +24,10 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var spinnerSort : Spinner
 
-    private lateinit var spinnerEntries: Array<String>
+    private val spinnerEntries = Task::class.java.declaredFields
+        .map(Field::getName)
+        .map{StringUtil.camelCaseToTitleCase(it)}
+        .filter { it != "Id" }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,7 +35,8 @@ class MainActivity : AppCompatActivity() {
         setSupportActionBar(findViewById(R.id.toolbar))
 
         findViewById<FloatingActionButton>(R.id.fab).setOnClickListener {
-            startActivity(Intent(this, CreateTaskActivity::class.java))
+            val childIntent = Intent(this, CreateTaskActivity::class.java)
+            startActivityForResult(childIntent, 1)
         }
 
         viewModel = TaskListViewModel(applicationContext)
@@ -65,6 +69,14 @@ class MainActivity : AppCompatActivity() {
             SpinnerSortItemSelectedListener(taskListAdapter, spinnerEntries)
 
         setDefaultSort("Due Date")
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if(requestCode == 1){
+            val task: Task = data?.extras?.getSerializable("TASK") as Task
+            viewModel.insertTask(task)
+        }
+        super.onActivityResult(requestCode, resultCode, data)
     }
 
     private fun setDefaultSort(field: String) {

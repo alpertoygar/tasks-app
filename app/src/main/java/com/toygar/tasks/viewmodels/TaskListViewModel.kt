@@ -21,4 +21,10 @@ class TaskListViewModel(context: Context) : ViewModel() {
             taskRepository.deleteTask(task)
         }
     }
+
+    fun insertTask(task: Task) {
+        viewModelScope.launch {
+            taskRepository.insertTask(task)
+        }
+    }
 }
