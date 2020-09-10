@@ -24,7 +24,7 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var spinnerSort : Spinner
 
-    private lateinit var spinnerEntries: Array<String>
+    private lateinit var spinnerEntries: List<String>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,7 +49,7 @@ class MainActivity : AppCompatActivity() {
 
         spinnerSort = findViewById(R.id.spinnerSort)
 
-        val spinnerEntries = Task::class.java.declaredFields
+        spinnerEntries = Task::class.java.declaredFields
             .map(Field::getName)
             .map{StringUtil.camelCaseToTitleCase(it)}
             .filter { it != "Id" }
