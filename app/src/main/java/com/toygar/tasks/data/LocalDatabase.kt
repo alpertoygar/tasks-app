@@ -22,7 +22,8 @@ abstract class LocalDatabase : RoomDatabase() {
                     INSTANCE = Room.databaseBuilder(
                         context,
                         LocalDatabase::class.java, "tasks-db"
-                    ).addMigrations(MIGRATION_1_2).build()
+                    //).addMigrations(MIGRATION_1_2).build()
+                    ).fallbackToDestructiveMigration().build()
                 }
                 return INSTANCE!!
             }

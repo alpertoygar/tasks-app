@@ -2,82 +2,56 @@ package com.toygar.tasks
 
 import android.content.Intent
 import android.os.Bundle
-import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import android.widget.Spinner
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.toygar.tasks.adapters.TaskListAdapter
-import com.toygar.tasks.models.Task
+import com.toygar.tasks.databinding.ActivityMainBinding
 import com.toygar.tasks.util.SpinnerSortItemSelectedListener
-import com.toygar.tasks.util.StringUtil
 import com.toygar.tasks.viewmodels.TaskListViewModel
-import java.lang.reflect.Field
 
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var viewModel: TaskListViewModel
-    private lateinit var recyclerView: RecyclerView
-    private lateinit var taskListAdapter: TaskListAdapter
+    private val viewModel: TaskListViewModel by viewModels()
 
-    private lateinit var spinnerSort : Spinner
-
-    private lateinit var spinnerEntries: List<String>
+    private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-        setSupportActionBar(findViewById(R.id.toolbar))
 
-        findViewById<FloatingActionButton>(R.id.fab).setOnClickListener {
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
+        setSupportActionBar(binding.toolbar)
+
+        binding.fab.setOnClickListener {
             startActivity(Intent(this, CreateTaskActivity::class.java))
         }
 
-        viewModel = TaskListViewModel(applicationContext)
-        recyclerView = findViewById(R.id.recyclerview)
-        taskListAdapter = TaskListAdapter(this, listOf(), viewModel::deleteTask)
-        recyclerView.adapter = taskListAdapter
-        recyclerView.layoutManager = LinearLayoutManager(this)
-
-        viewModel.tasks.observe(this, { tasks ->
-            taskListAdapter.setData(tasks)
-            recyclerView.smoothScrollToPosition(tasks.size)
-        })
-
-
-        spinnerSort = findViewById(R.id.spinnerSort)
-
-        spinnerEntries = Task::class.java.declaredFields
-            .map(Field::getName)
-            .map{StringUtil.camelCaseToTitleCase(it)}
-            .filter { it != "Id" }
+        val taskListAdapter = TaskListAdapter(viewModel::deleteTask)
+        binding.recyclerview.adapter = taskListAdapter
+        binding.recyclerview.layoutManager = LinearLayoutManager(this)
 
         val spinnerAdapter: ArrayAdapter<String> = ArrayAdapter(
             this,
             R.layout.support_simple_spinner_dropdown_item,
-            spinnerEntries)
+            viewModel.spinnerEntries)
 
-        spinnerSort.adapter = spinnerAdapter
+        binding.spinnerSort.adapter = spinnerAdapter
 
-        spinnerSort.onItemSelectedListener =
-            SpinnerSortItemSelectedListener(taskListAdapter, spinnerEntries)
+        binding.spinnerSort.onItemSelectedListener =
+            SpinnerSortItemSelectedListener(taskListAdapter, viewModel.spinnerEntries)
 
         setDefaultSort("Due Date")
+
+        viewModel.tasks.observe(this, {
+            taskListAdapter.setData(it)
+            binding.recyclerview.smoothScrollToPosition(it.size)
+        })
     }
 
     private fun setDefaultSort(field: String) {
-        var pos = 0
-
-        for (spinnerEntry in spinnerEntries) {
-            if(spinnerEntry != field){
-                pos++
-            } else {
-                break
-            }
-        }
-
-        spinnerSort.setSelection(pos)
+        viewModel.getSpinnerPosition(field)
+        binding.spinnerSort.setSelection(viewModel.spinnerPosition)
     }
 }

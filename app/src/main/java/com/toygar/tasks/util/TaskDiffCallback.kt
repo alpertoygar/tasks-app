@@ -3,23 +3,12 @@ package com.toygar.tasks.util
 import androidx.recyclerview.widget.DiffUtil
 import com.toygar.tasks.models.Task
 
-class TaskDiffCallback(
-    private val oldList: List<Task>,
-    private val newList: List<Task>
-) : DiffUtil.Callback() {
-    override fun getOldListSize(): Int = oldList.size
-
-
-    override fun getNewListSize(): Int = newList.size
-
-    override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-        return oldList[oldItemPosition].id == newList[newItemPosition].id
+class TaskDiffCallback : DiffUtil.ItemCallback<Task>() {
+    override fun areItemsTheSame(oldItem: Task, newItem: Task): Boolean {
+        return oldItem.id == newItem.id
     }
 
-    override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-        val oldItem = oldList[oldItemPosition]
-        val newItem = newList[newItemPosition]
+    override fun areContentsTheSame(oldItem: Task, newItem: Task): Boolean {
         return oldItem == newItem
     }
-
 }

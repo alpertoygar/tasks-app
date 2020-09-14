@@ -1,51 +1,42 @@
 package com.toygar.tasks.adapters
 
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.toygar.tasks.databinding.TaskCardBinding
 import com.toygar.tasks.models.Task
 import com.toygar.tasks.util.TaskDiffCallback
-import java.lang.reflect.Field
 
 class TaskListAdapter(
-    context: Context,
-    private var taskList: List<Task>,
     private val deleteMethod: (Task) -> Unit
-): RecyclerView.Adapter<TaskListAdapter.TaskViewHolder>() {
+): ListAdapter<Task, TaskListAdapter.TaskViewHolder>(TaskDiffCallback()) {
 
-    private val inflater: LayoutInflater = LayoutInflater.from(context)
     private var comparator: Comparator<Task> = compareBy(Task::dueDate)
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
     ): TaskViewHolder {
-
+        val inflater: LayoutInflater = LayoutInflater.from(parent.context)
         val itemBinding : TaskCardBinding = TaskCardBinding.inflate(inflater, parent, false)
         return TaskViewHolder(itemBinding)
     }
 
     override fun onBindViewHolder(holder: TaskViewHolder, position: Int) {
-        val current : Task = taskList[position]
+        val current : Task = currentList[position]
         holder.bind(current, deleteMethod)
     }
 
-    override fun getItemCount(): Int = taskList.size
+    override fun getItemCount(): Int = currentList.size
 
     fun setData(newTasks: List<Task>) {
         val newSortedTasks = newTasks.sortedWith(comparator)
-        val diffCallback = TaskDiffCallback(taskList, newSortedTasks)
-        val diffResult = DiffUtil.calculateDiff(diffCallback)
-        taskList = newSortedTasks
-        diffResult.dispatchUpdatesTo(this)
+        submitList(newSortedTasks)
     }
 
     fun sortData(sortField: String) {
         val hm = hashMapOf<String, Comparator<Task>>()
-        hm.put("Description", compareBy(Task::description))
         hm.put("Name", compareBy(Task::name))
         hm.put("Due Date", compareBy(Task::dueDate))
         hm.put("Priority", compareBy(Task::priority))
@@ -53,7 +44,7 @@ class TaskListAdapter(
 
         comparator = hm[sortField]!!
 
-        setData(taskList)
+        setData(currentList)
     }
 
     class TaskViewHolder(
