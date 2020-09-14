@@ -5,7 +5,11 @@ import androidx.room.TypeConverter
 enum class Priority {
     HIGH,
     MEDIUM,
-    LOW
+    LOW;
+
+    fun toHumanString(): String {
+        return super.toString().toLowerCase().capitalize()
+    }
 }
 
 class PriorityConverter{
